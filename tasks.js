@@ -58,6 +58,26 @@ function fetchTasks() {
 
 // INTERACTIONS
 
+var postPutorDeleteAjaxRequest = function(type, url, data, successCallback, errorCallback) {
+	var request = new XMLHttpRequest();
+	
+	request.open(type, url);
+	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+	request.send(JSON.stringify(data));
+	console.log(JSON.stringify(data));
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
+			successCallback();
+		} else {
+			errorCallback();
+		}
+	}
+
+	request.onerror = function() {
+		errorCallback();
+	}
+}
+
 var submitTaskForm = document.getElementById('submitTask');
 
 submitTaskForm.addEventListener('submit', function(event) {
@@ -68,28 +88,17 @@ submitTaskForm.addEventListener('submit', function(event) {
 				completed : '0'
 			}
 		},
-		url = "http://localhost:3000/" + 'tasks.json',
-		request = new XMLHttpRequest();
-		request.open('POST', url);
-		request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-		request.send(JSON.stringify(task));
-		console.log(JSON.stringify(task));
-		request.onload = function() {
-			if (request.status >= 200 && request.status < 400) {
+		url = "http://localhost:3000/" + 'tasks.json';
+
+		postPutorDeleteAjaxRequest('POST',url,task,function() {
+			console.log('success');
+			var inputForm = document.getElementById('submitTask');
 				fetchTasks();
-				var inputForm = document.getElementById('submitTask');
 				inputForm.reset();
-			} else {
-				console.log('we got a server error');
-				fetchTasks();
-			}
-		}
-
-		request.onerror = function() {
-			console.log('an error of some kind');
+		}, function() {
+			console.log('error of some kind');
 			fetchTasks();
-		}
-
+		});
 })
 
 // Can this be removed from jQuery? It utilizes event delegation, which
@@ -101,25 +110,15 @@ $('#taskList, #completedTasks').on('click', ".deletetask", function(e) {
 				id: this.getAttribute('data-id')
 			}
 		},
-		url = "http://localhost:3000/tasks/" + task.task.id + '.json',
-		request = new XMLHttpRequest();
+		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 
-	request.open('DELETE', url);
-	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-	request.send(JSON.stringify(task));
-	request.onload = function() {
-		if (request.status >= 200 && request.status < 400) {
-			fetchTasks();
-		} else {
-			console.log('DELETE TASK: we got a server error');
-			fetchTasks();
-		}
-	}
-
-	request.onerror = function() {
-		console.log('DELETE TASK: an error of some kind');
+	postPutorDeleteAjaxRequest('DELETE',url,task,function() {
+		console.log('success');
 		fetchTasks();
-	}
+	}, function() {
+		console.log('error of some kind');
+		fetchTasks();
+	});
 });
 
 $('#taskList').on('click', ".completeTask", function(e) {
@@ -130,25 +129,15 @@ $('#taskList').on('click', ".completeTask", function(e) {
 				completed: '1'
 			}
 		},
-		url = "http://localhost:3000/tasks/" + task.task.id + '.json',
-		request = new XMLHttpRequest();
-
-	request.open('PUT', url);
-	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-	request.send(JSON.stringify(task));
-	request.onload = function() {
-		if (request.status >= 200 && request.status < 400) {
-			fetchTasks();
-		} else {
-			console.log('EDIT TASK: we got a server error');
-			fetchTasks();
-		}
-	}
-
-	request.onerror = function() {
-		console.log('EDIT TASK: an error of some kind');
+		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+	
+	postPutorDeleteAjaxRequest('PUT',url,task,function() {
+		console.log('success');
 		fetchTasks();
-	}
+	}, function() {
+		console.log('error of some kind');
+		fetchTasks();
+	});
 });
 
 $('#completedTasks').on('click', ".redoTask", function(e) {
@@ -160,24 +149,14 @@ $('#completedTasks').on('click', ".redoTask", function(e) {
 			}
 		},
 		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-		request = new XMLHttpRequest();
 
-	request.open('PUT', url);
-	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-	request.send(JSON.stringify(task));
-	request.onload = function() {
-		if (request.status >= 200 && request.status < 400) {
-			fetchTasks();
-		} else {
-			console.log('EDIT TASK: we got a server error');
-			fetchTasks();
-		}
-	}
-
-	request.onerror = function() {
-		console.log('EDIT TASK: an error of some kind');
+	postPutorDeleteAjaxRequest('PUT',url,task,function() {
+		console.log('success');
 		fetchTasks();
-	}
+	}, function() {
+		console.log('error of some kind');
+		fetchTasks();
+	});
 
 });
 
@@ -207,24 +186,14 @@ $('#taskList').on('submit', '.taskEditForm', function(e) {
 			}
 	};
 	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-		request = new XMLHttpRequest();
-
-	request.open('PUT', url);
-	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-	request.send(JSON.stringify(task));
-	request.onload = function() {
-		if (request.status >= 200 && request.status < 400) {
-			fetchTasks();
-		} else {
-			console.log('EDIT TASK: we got a server error');
-			fetchTasks();
-		}
-	}
-
-	request.onerror = function() {
-		console.log('EDIT TASK: an error of some kind');
+	
+	postPutorDeleteAjaxRequest('PUT',url,task,function() {
+		console.log('success');
 		fetchTasks();
-	}
+	}, function() {
+		console.log('error of some kind');
+		fetchTasks();
+	});
 });
 
 
@@ -236,7 +205,6 @@ function renderTasks() {
 		tasks = document.querySelectorAll('li'),
 		listNode = document.getElementById('taskList'),
 		completedList = document.getElementById('completedTasks'),
-		
 		task;
 	
 	// remove all existing tasks
