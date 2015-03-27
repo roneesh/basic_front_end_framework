@@ -39,14 +39,21 @@ function Task(taskObject) {
 function fetchTasks() {
 	var url = API_URL_ROOT + '/tasks.json',
 		that = this;
-	$.ajax({
-  		url: url,
-  		type: 'GET',
-  		dataType: "json",
-	    crossDomain: true
-  	}).done(function(res) { 
-  		model.taskList = new TaskList(res);
-  	});
+		request = new XMLHttpRequest();
+
+	request.open('GET', url, true);
+	request.send();
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
+			model.taskList = new TaskList(JSON.parse(request.responseText));
+		} else {
+			console.log('GET TASKS: we got a server error');
+		}
+	}
+
+	request.onerror = function() {
+		console.log('GET TASKS: an error of some kind');
+	}
 }	  
 
 // INTERACTIONS
@@ -70,7 +77,8 @@ submitTaskForm.addEventListener('submit', function(event) {
 		request.onload = function() {
 			if (request.status >= 200 && request.status < 400) {
 				fetchTasks();
-				console.log('success!')
+				var inputForm = document.getElementById('submitTask');
+				inputForm.reset();
 			} else {
 				console.log('we got a server error');
 				fetchTasks();
@@ -84,64 +92,93 @@ submitTaskForm.addEventListener('submit', function(event) {
 
 })
 
+// Can this be removed from jQuery? It utilizes event delegation, which
+// native JS doesn't have
 $('#taskList, #completedTasks').on('click', ".deletetask", function(e) {
 	e.preventDefault();
 	var task = {
-		task : {
-			id: $(this).attr('data-id')
-		}
-	},
-	url = "http://localhost:3000/tasks/" + task.task.id + '.json',
-	that = this;
-	$.ajax({
-			url: url,
-			type: 'DELETE',
-			data: JSON.stringify(task),
-			dataType: "json",
-    		crossDomain: true
-		}).done(function() {
+			task : {
+				id: $(this).attr('data-id')
+			}
+		},
+		url = "http://localhost:3000/tasks/" + task.task.id + '.json',
+		request = new XMLHttpRequest();
+
+	request.open('DELETE', url);
+	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+	request.send(JSON.stringify(task));
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
 			fetchTasks();
-		});
+		} else {
+			console.log('DELETE TASK: we got a server error');
+			fetchTasks();
+		}
+	}
+
+	request.onerror = function() {
+		console.log('DELETE TASK: an error of some kind');
+		fetchTasks();
+	}
 });
 
 $('#taskList').on('click', ".completeTask", function(e) {
 	e.preventDefault();
 	var task = {
-		task : {
-			id: $(this).attr('data-id'),
-			completed: '1'
-		}
-	},
-	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-	$.ajax({
-			url: url,
-			type: 'PUT',
-			data: task,
-			dataType: "json",
-    		crossDomain: true
-		}).done(function() {
+			task : {
+				id: $(this).attr('data-id'),
+				completed: '1'
+			}
+		},
+		url = "http://localhost:3000/tasks/" + task.task.id + '.json',
+		request = new XMLHttpRequest();
+
+	request.open('PUT', url);
+	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+	request.send(JSON.stringify(task));
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
 			fetchTasks();
-		});
+		} else {
+			console.log('EDIT TASK: we got a server error');
+			fetchTasks();
+		}
+	}
+
+	request.onerror = function() {
+		console.log('EDIT TASK: an error of some kind');
+		fetchTasks();
+	}
 });
 
 $('#completedTasks').on('click', ".redoTask", function(e) {
 	e.preventDefault();
 	var task = {
-		task : {
-			id: $(this).attr('data-id'),
-			completed: '0'
-		}
-	},
-	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-	$.ajax({
-			url: url,
-			type: 'PUT',
-			data: task,
-			dataType: "json",
-    		crossDomain: true
-		}).done(function() {
+			task : {
+				id: $(this).attr('data-id'),
+				completed: '0'
+			}
+		},
+		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+		request = new XMLHttpRequest();
+
+	request.open('PUT', url);
+	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+	request.send(JSON.stringify(task));
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
 			fetchTasks();
-		});
+		} else {
+			console.log('EDIT TASK: we got a server error');
+			fetchTasks();
+		}
+	}
+
+	request.onerror = function() {
+		console.log('EDIT TASK: an error of some kind');
+		fetchTasks();
+	}
+
 });
 
 // allow inline task editing, only for uncompleted tasks!
@@ -170,17 +207,24 @@ $('#taskList').on('submit', '.taskEditForm', function(e) {
 			}
 	};
 	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-	$.ajax({
-			url: url,
-			type: 'PUT',
-			data: task,
-			dataType: "json",
-    		crossDomain: true
-		}).done(function() {
+		request = new XMLHttpRequest();
+
+	request.open('PUT', url);
+	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+	request.send(JSON.stringify(task));
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
 			fetchTasks();
-		}).fail(function() {
+		} else {
+			console.log('EDIT TASK: we got a server error');
 			fetchTasks();
-		});
+		}
+	}
+
+	request.onerror = function() {
+		console.log('EDIT TASK: an error of some kind');
+		fetchTasks();
+	}
 });
 
 
