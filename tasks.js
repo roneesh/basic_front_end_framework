@@ -51,26 +51,38 @@ function fetchTasks() {
 
 // INTERACTIONS
 
-$('#submitTask').on('submit', function(e) {
-	e.preventDefault();
+var submitTaskForm = document.getElementById('submitTask');
+
+submitTaskForm.addEventListener('submit', function(event) {
+	event.preventDefault();
 	var task = {
-		task : {
-			description: $('.taskInput').val(),
-			completed : '0'
+			task : {
+				description: $('.taskInput').val(),
+				completed : '0'
+			}
+		},
+		url = "http://localhost:3000/" + 'tasks.json',
+		request = new XMLHttpRequest();
+		request.open('POST', url);
+		request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+		request.send(JSON.stringify(task));
+		console.log(JSON.stringify(task));
+		request.onload = function() {
+			if (request.status >= 200 && request.status < 400) {
+				fetchTasks();
+				console.log('success!')
+			} else {
+				console.log('we got a server error');
+				fetchTasks();
+			}
 		}
-	},
-	url = "http://localhost:3000/" + 'tasks.json';
-	$.ajax({
-			url: url,
-			type: 'POST',
-			data: task,
-			dataType: "json",
-    	crossDomain: true
-		}).done(function() {
+
+		request.onerror = function() {
+			console.log('an error of some kind');
 			fetchTasks();
-			$('.taskInput').val('')
-		});
-});
+		}
+
+})
 
 $('#taskList, #completedTasks').on('click', ".deletetask", function(e) {
 	e.preventDefault();
@@ -165,6 +177,8 @@ $('#taskList').on('submit', '.taskEditForm', function(e) {
 			dataType: "json",
     		crossDomain: true
 		}).done(function() {
+			fetchTasks();
+		}).fail(function() {
 			fetchTasks();
 		});
 });
