@@ -1,0 +1,51 @@
+<html>
+
+<head>
+	<style>
+		body {
+			font-size: 18px;
+			font-family: 'Helvetica', sans-serif;
+			color: rgb(20,20,20);
+		}
+		.hook {
+			width: 200px;
+			height: 200px;
+			background-color: rgba(0,0,0, 0.5);
+			border-radius: 15px;
+			color: white;
+			font-family: sans-serif;
+			padding: 20px;
+			font-size: 18px;
+		}
+		input {
+			background: none;
+			border: none;
+			border-bottom: 1px dotted;
+			color: black;
+			font-size: 18px;
+		}
+		.taskList {
+			font-size: 18px;
+			list-style-type: none;
+		}
+		form label { color: rgba(154,219,156,1);}
+		.taskEditForm { display: inline; }
+	</style>
+	<script src="./jquery.js"></script>
+</head>
+<body>
+	<h1> Task List </h1>
+
+	<form id="submitTask">
+		<label> Add Task: </label>
+		<input class="taskInput">
+		<button type="submit">Add</button>
+	</form>
+	<h3> To Do </h3>
+	<ul id="taskList" class="taskList" ></ul>
+	<h3> Done (U da bomb!) </h3>
+	<ul id="completedTasks" class="taskLIst"></ul>
+	<script src="./tasks.js"></script>
+</body>
+
+</html>
