@@ -150,24 +150,23 @@ $('#taskList').on('click', ".taskDescription", function(e) {
 
 $('#taskList').on('submit', '.taskEditForm', function(e) {
 	e.preventDefault();
-
-	// var task = {
-	// 	task : {
-	// 		id: $(this).attr('data-id'),
-	// 		completed: '0'
-	// 	}
-	// },
-	// url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-	// $.ajax({
-	// 		url: url,
-	// 		type: 'PUT',
-	// 		data: task,
-	// 		dataType: "json",
-    // 		crossDomain: true
-	// 	}).done(function() {
-	// 		fetchTasks();
-	// 	});
-
+	var newDescription = this.children[0].value,
+		task = {
+			task : {
+				id: this.parentNode.getAttribute('data-id'),
+				description: newDescription
+			}
+	};
+	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+	$.ajax({
+			url: url,
+			type: 'PUT',
+			data: task,
+			dataType: "json",
+    		crossDomain: true
+		}).done(function() {
+			fetchTasks();
+		});
 });
 
 
@@ -211,7 +210,6 @@ function renderTasks() {
 		listItemDeleteButton.setAttribute('data-id',model.taskList[task].id);
 		listItemNode.appendChild(listItemDeleteButton);
 
-		console.log(task);
 
 		// if the task is completed, add a redo button, else add a complete button, 
 		// and then append to the proper list
