@@ -64,7 +64,7 @@ submitTaskForm.addEventListener('submit', function(event) {
 	event.preventDefault();
 	var task = {
 			task : {
-				description: $('.taskInput').val(),
+				description: document.getElementsByClassName('taskInput')[0].value,
 				completed : '0'
 			}
 		},
@@ -98,7 +98,7 @@ $('#taskList, #completedTasks').on('click', ".deletetask", function(e) {
 	e.preventDefault();
 	var task = {
 			task : {
-				id: $(this).attr('data-id')
+				id: this.getAttribute('data-id')
 			}
 		},
 		url = "http://localhost:3000/tasks/" + task.task.id + '.json',
@@ -126,7 +126,7 @@ $('#taskList').on('click', ".completeTask", function(e) {
 	e.preventDefault();
 	var task = {
 			task : {
-				id: $(this).attr('data-id'),
+				id: this.getAttribute('data-id'),
 				completed: '1'
 			}
 		},
@@ -155,7 +155,7 @@ $('#completedTasks').on('click', ".redoTask", function(e) {
 	e.preventDefault();
 	var task = {
 			task : {
-				id: $(this).attr('data-id'),
+				id: this.getAttribute('data-id'),
 				completed: '0'
 			}
 		},
