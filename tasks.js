@@ -64,7 +64,6 @@ var postPutorDeleteAjaxRequest = function(type, url, data, successCallback, erro
 	request.open(type, url);
 	request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 	request.send(JSON.stringify(data));
-	console.log(JSON.stringify(data));
 	request.onload = function() {
 		if (request.status >= 200 && request.status < 400) {
 			successCallback();
@@ -91,12 +90,10 @@ submitTaskForm.addEventListener('submit', function(event) {
 		url = "http://localhost:3000/" + 'tasks.json';
 
 		postPutorDeleteAjaxRequest('POST',url,task,function() {
-			console.log('success');
 			var inputForm = document.getElementById('submitTask');
 				fetchTasks();
 				inputForm.reset();
 		}, function() {
-			console.log('error of some kind');
 			fetchTasks();
 		});
 })
@@ -113,10 +110,8 @@ $('#taskList, #completedTasks').on('click', ".deletetask", function(e) {
 		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 
 	postPutorDeleteAjaxRequest('DELETE',url,task,function() {
-		console.log('success');
 		fetchTasks();
 	}, function() {
-		console.log('error of some kind');
 		fetchTasks();
 	});
 });
@@ -132,10 +127,8 @@ $('#taskList').on('click', ".completeTask", function(e) {
 		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 	
 	postPutorDeleteAjaxRequest('PUT',url,task,function() {
-		console.log('success');
 		fetchTasks();
 	}, function() {
-		console.log('error of some kind');
 		fetchTasks();
 	});
 });
@@ -151,10 +144,8 @@ $('#completedTasks').on('click', ".redoTask", function(e) {
 		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 
 	postPutorDeleteAjaxRequest('PUT',url,task,function() {
-		console.log('success');
 		fetchTasks();
 	}, function() {
-		console.log('error of some kind');
 		fetchTasks();
 	});
 
@@ -188,10 +179,8 @@ $('#taskList').on('submit', '.taskEditForm', function(e) {
 	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 	
 	postPutorDeleteAjaxRequest('PUT',url,task,function() {
-		console.log('success');
 		fetchTasks();
 	}, function() {
-		console.log('error of some kind');
 		fetchTasks();
 	});
 });
