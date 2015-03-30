@@ -16,7 +16,6 @@ Object.observe(model.taskList, function(changes){
         console.log(change.type, change.name, change.oldValue);
         renderTasks();
     });
-
 });
 
 function TaskList(taskList) {
@@ -81,13 +80,15 @@ var submitTaskForm = document.getElementById('submitTask');
 
 submitTaskForm.addEventListener('submit', function(event) {
 	event.preventDefault();
-	var task = {
+	
+	if (document.getElementsByClassName('taskInput')[0].value) {
+		var task = {
 			task : {
-				description: document.getElementsByClassName('taskInput')[0].value,
-				completed : '0'
-			}
-		},
-		url = "http://localhost:3000/" + 'tasks.json';
+					description: document.getElementsByClassName('taskInput')[0].value,
+					completed : '0'
+				}
+			},
+			url = "http://localhost:3000/" + 'tasks.json';
 
 		postPutorDeleteAjaxRequest('POST',url,task,function() {
 			var inputForm = document.getElementById('submitTask');
@@ -96,6 +97,8 @@ submitTaskForm.addEventListener('submit', function(event) {
 		}, function() {
 			fetchTasks();
 		});
+	}
+	
 })
 
 var taskList = document.getElementById('taskList'),
