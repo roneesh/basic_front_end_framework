@@ -191,7 +191,7 @@ taskList.addEventListener('click', function(event) {
 		inlineFormField.classList.add('taskEditField');
 		inlineFormField.setAttribute('placeholder',oldDescription);
 		parent.insertBefore(inlineForm, parent.firstChild);	
-
+		inlineFormField.focus();
 	}
 });
 
