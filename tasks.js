@@ -98,93 +98,122 @@ submitTaskForm.addEventListener('submit', function(event) {
 		});
 })
 
-// Can this be removed from jQuery? It utilizes event delegation, which
-// native JS doesn't have
-$('#taskList, #completedTasks').on('click', ".deletetask", function(e) {
-	e.preventDefault();
-	var task = {
-			task : {
-				id: this.getAttribute('data-id')
-			}
-		},
-		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+var taskList = document.getElementById('taskList'),
+	completedTasks = document.getElementById('completedTasks');
 
-	postPutorDeleteAjaxRequest('DELETE',url,task,function() {
-		fetchTasks();
-	}, function() {
-		fetchTasks();
-	});
+taskList.addEventListener('click', function(event) {
+	event.preventDefault();
+	if (event.target.className === 'deleteTask') {
+		var task = {
+				task : {
+					id: event.target.getAttribute('data-id')
+				}
+			},
+			url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+		
+		postPutorDeleteAjaxRequest('DELETE',url,task,function() {
+			fetchTasks();
+		}, function() {
+			fetchTasks();
+		});
+	}
+});
+completedTasks.addEventListener('click', function(event) {
+	event.preventDefault();
+	if (event.target && event.target.className === 'deleteTask') {
+		var task = {
+				task : {
+					id: event.target.getAttribute('data-id')
+				}
+			},
+			url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+
+		postPutorDeleteAjaxRequest('DELETE',url,task,function() {
+			fetchTasks();
+		}, function() {
+			fetchTasks();
+		});
+	}
 });
 
-$('#taskList').on('click', ".completeTask", function(e) {
-	e.preventDefault();
-	var task = {
-			task : {
-				id: this.getAttribute('data-id'),
-				completed: '1'
-			}
-		},
-		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
-	
-	postPutorDeleteAjaxRequest('PUT',url,task,function() {
-		fetchTasks();
-	}, function() {
-		fetchTasks();
-	});
+taskList.addEventListener('click', function(event) {
+	event.preventDefault();
+	if (event.target.className === 'completeTask') {
+		var task = {
+				task : {
+					id: event.target.getAttribute('data-id'),
+					completed: '1'
+				}
+			},
+			url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+		
+		postPutorDeleteAjaxRequest('PUT',url,task,function() {
+			fetchTasks();
+		}, function() {
+			fetchTasks();
+		});
+	}
 });
 
-$('#completedTasks').on('click', ".redoTask", function(e) {
-	e.preventDefault();
-	var task = {
-			task : {
-				id: this.getAttribute('data-id'),
-				completed: '0'
-			}
-		},
-		url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+completedTasks.addEventListener('click', function(event) {
+	event.preventDefault();
+	if (event.target && event.target.className === 'redoTask') {
+		var task = {
+				task : {
+					id: event.target.getAttribute('data-id'),
+					completed: '0'
+				}
+			},
+			url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 
-	postPutorDeleteAjaxRequest('PUT',url,task,function() {
-		fetchTasks();
-	}, function() {
-		fetchTasks();
-	});
-
+		postPutorDeleteAjaxRequest('PUT',url,task,function() {
+			fetchTasks();
+		}, function() {
+			fetchTasks();
+		});
+	}
 });
+
 
 // allow inline task editing, only for uncompleted tasks!
-$('#taskList').on('click', ".taskDescription", function(e) {
-	var oldDescription = this.innerHTML,
-		parent = this.parentNode,
-		inlineForm = document.createElement('form')
-		inlineFormField = document.createElement('input');
 
-	this.parentNode.removeChild(this);
-	inlineForm.appendChild(inlineFormField);
-	inlineForm.classList.add('taskEditForm')
-	inlineFormField.classList.add('taskEditField');
-	inlineFormField.setAttribute('placeholder',oldDescription);
-	parent.insertBefore(inlineForm, parent.firstChild);
+taskList.addEventListener('click', function(event) {
+	event.preventDefault();
+	if (event.target.className === 'taskDescription') {
+		var oldDescription = event.target.innerHTML,
+			parent = event.target.parentNode,
+			inlineForm = document.createElement('form')
+			inlineFormField = document.createElement('input');
 
+		event.target.parentNode.removeChild(event.target);
+		inlineForm.appendChild(inlineFormField);
+		inlineForm.classList.add('taskEditForm')
+		inlineFormField.classList.add('taskEditField');
+		inlineFormField.setAttribute('placeholder',oldDescription);
+		parent.insertBefore(inlineForm, parent.firstChild);	
+
+	}
 });
 
-$('#taskList').on('submit', '.taskEditForm', function(e) {
-	e.preventDefault();
-	var newDescription = this.children[0].value,
-		task = {
-			task : {
-				id: this.parentNode.getAttribute('data-id'),
-				description: newDescription
-			}
-	};
-	url = "http://localhost:3000/tasks/" + task.task.id + '.json';
+taskList.addEventListener('submit', function(event) {
+	event.preventDefault();
+	if (event.target.className === 'taskEditForm') {
+		var newDescription = event.target.children[0].value,
+			task = {
+				task : {
+					id: event.target.parentNode.getAttribute('data-id'),
+					description: newDescription
+				}
+			};
+			url = "http://localhost:3000/tasks/" + task.task.id + '.json';
 	
-	postPutorDeleteAjaxRequest('PUT',url,task,function() {
-		fetchTasks();
-	}, function() {
-		fetchTasks();
-	});
+		postPutorDeleteAjaxRequest('PUT',url,task,function() {
+			fetchTasks();
+		}, function() {
+			fetchTasks();
+		});
+	}
 });
-
 
 // VIEW
 
@@ -221,7 +250,7 @@ function renderTasks() {
 
 		// Now, add a delete button to the task (all tasks can be deleted)
 		listItemDeleteButton.innerHTML = 'Delete';
-		listItemDeleteButton.classList.add('deletetask');
+		listItemDeleteButton.classList.add('deleteTask');
 		listItemDeleteButton.setAttribute('data-id',model.taskList[task].id);
 		listItemNode.appendChild(listItemDeleteButton);
 
