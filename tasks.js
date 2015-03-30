@@ -215,6 +215,20 @@ taskList.addEventListener('submit', function(event) {
 	}
 });
 
+taskList.addEventListener('keydown', function(event) {
+	if (event.keyCode === 27) {
+		var oldDescription = event.target.getAttribute('placeholder'),
+			newDescriptionSpan = document.createElement('span'),
+			parent = event.target.parentNode;
+
+		newDescriptionSpan.classList.add('taskDescription');
+		newDescriptionSpan.innerHTML = oldDescription;
+
+		event.target.parentNode.removeChild(event.target);
+		parent.insertBefore(newDescriptionSpan, event.target.parent);	
+	}
+});
+
 // VIEW
 
 function renderTasks() {
