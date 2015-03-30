@@ -14,7 +14,10 @@
 			color: black;
 			font-size: 18px;
 		}
-		#submitTask label { color: rgba(154,219,156,1);}
+		#submitTask, #submitTask button, #submitTask input { 
+			color: rgba(154,219,156,1); 
+			border-color: rgba(154,219,156,1);
+		}
 		.taskList {
 			font-size: 18px;
 			list-style-type: none;
@@ -28,8 +31,9 @@
 					margin: 0 20px; 
 					width: 75px; 
 					background: none;
-					border: 1px dotted #333;
+					border: 1px dotted;
 				}
+				.task button { border-color: #333;}
 		.taskEditForm { display: inline; }
 		.taskEditForm input { min-width: 200px;}
 	</style>
