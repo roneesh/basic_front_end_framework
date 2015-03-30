@@ -7,19 +7,31 @@
 			font-family: 'Helvetica', sans-serif;
 			color: rgb(20,20,20);
 		}
-		input {
+		input{
 			background: none;
 			border: none;
-			border-bottom: 1px dotted;
+			border-bottom: 1px dotted #333;
 			color: black;
 			font-size: 18px;
 		}
+		#submitTask label { color: rgba(154,219,156,1);}
 		.taskList {
 			font-size: 18px;
 			list-style-type: none;
 		}
-		form label { color: rgba(154,219,156,1);}
+			.task { margin-bottom: 5px;}
+				.taskDescription {
+					display: inline-block;
+					min-width: 200px;
+				}
+				.task button { 
+					margin: 0 20px; 
+					width: 75px; 
+					background: none;
+					border: 1px dotted #333;
+				}
 		.taskEditForm { display: inline; }
+		.taskEditForm input { min-width: 200px;}
 	</style>
 </head>
 <body>

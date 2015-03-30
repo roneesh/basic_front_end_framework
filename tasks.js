@@ -244,7 +244,7 @@ function renderTasks() {
 		// Append the text span to the list item 
 		listItemText.innerHTML = model.taskList[task].description;
 		listItemText.classList.add('taskDescription');
-		listItemCompleted.innerHTML = ' - completed: ' + model.taskList[task].completed;
+		// listItemCompleted.innerHTML = ' - completed: ' + model.taskList[task].completed;
 		listItemNode.appendChild(listItemText);
 		listItemNode.appendChild(listItemCompleted);
 
@@ -252,7 +252,6 @@ function renderTasks() {
 		listItemDeleteButton.innerHTML = 'Delete';
 		listItemDeleteButton.classList.add('deleteTask');
 		listItemDeleteButton.setAttribute('data-id',model.taskList[task].id);
-		listItemNode.appendChild(listItemDeleteButton);
 
 
 		// if the task is completed, add a redo button, else add a complete button, 
@@ -264,6 +263,7 @@ function renderTasks() {
 			listItemCompleteButton.classList.add('completeTask');
 			listItemCompleteButton.setAttribute('data-id',model.taskList[task].id);
 			listItemNode.appendChild(listItemCompleteButton);
+			listItemNode.appendChild(listItemDeleteButton);
 
 			listNode.appendChild(listItemNode);
 		}
@@ -275,6 +275,7 @@ function renderTasks() {
 			listItemRedoButton.classList.add('redoTask');
 			listItemRedoButton.setAttribute('data-id',model.taskList[task].id);
 			listItemNode.appendChild(listItemRedoButton);
+			listItemNode.appendChild(listItemDeleteButton);
 
 			completedList.appendChild(listItemNode);
 		}
