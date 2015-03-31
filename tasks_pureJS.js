@@ -37,7 +37,6 @@ function Task(taskObject) {
 
 function fetchTasks() {
 	var url = API_URL_ROOT + '/tasks.json',
-		that = this;
 		request = new XMLHttpRequest();
 
 	request.open('GET', url, true);

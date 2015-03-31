@@ -1,56 +1,30 @@
 <html>
 
 <head>
-	<style>
-		body {
-			font-size: 18px;
-			font-family: 'Helvetica', sans-serif;
-			color: rgb(20,20,20);
-		}
-		input{
-			background: none;
-			border: none;
-			border-bottom: 1px dotted #333;
-			color: black;
-			font-size: 18px;
-		}
-		#submitTask, #submitTask button, #submitTask input { 
-			color: rgba(154,219,156,1); 
-			border-color: rgba(154,219,156,1);
-		}
-		.taskList {
-			font-size: 18px;
-			list-style-type: none;
-		}
-			.task { margin-bottom: 5px;}
-				.taskDescription {
-					display: inline-block;
-					min-width: 200px;
-				}
-				.task button, #submitTask button { 
-					margin: 0 20px; 
-					width: 75px; 
-					background: none;
-					border: 1px dotted;
-				}
-				.task button { border-color: #333;}
-		.taskEditForm { display: inline; }
-		.taskEditForm input { min-width: 200px;}
-	</style>
+	<link rel="stylesheet" href="./styles.css" />
+	
+	<script src="http://fb.me/react-0.13.1.js"></script>
+	<script src="http://fb.me/JSXTransformer-0.13.1.js"></script>
 </head>
 <body>
+	
 	<h1> Task List </h1>
-
 	<form id="submitTask">
 		<label> Add Task: </label>
 		<input class="taskInput">
 		<button type="submit">Add</button>
 	</form>
-	<h3> To Do </h3>
+<!-- 	<h3> To Do </h3>
 	<ul id="taskList" class="taskList" ></ul>
 	<h3> Done (U da bomb!) </h3>
-	<ul id="completedTasks" class="taskLIst"></ul>
-	<script src="./tasks.js"></script>
+	<ul id="completedTasks" class="taskList"></ul> -->
+	<!-- <script src="./tasks_pureJS.js"></script> -->
+
+	<h3> To Do </h3>
+	<div id="taskList"></div>
+	<h3> Done (U da bomb!) </h3>
+	<div id="completedTasks"></div>
+	<script type="text/jsx" src="./tasks_react.jsx"></script>
 </body>
 
 </html>
